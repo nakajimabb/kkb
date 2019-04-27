@@ -1,0 +1,19 @@
+
+<table>
+  <thead>
+    <tr>
+      <th>code</th>
+      <th>name</th>
+      <th>members</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @groups.each do |group| %>
+      <tr>
+        <td><%= group.code %></td>
+        <td><%= group.name %></td>
+        <td><%= group.users.pluck(:last_name).join(', ') %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

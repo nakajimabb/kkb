@@ -2,13 +2,23 @@
 <table>
   <thead>
     <tr>
+      <th>code</th>
+      <th>name</th>
+      <th>kana</th>
       <th>email</th>
+      <th>sex</th>
+      <th>birthday</th>
     </tr>
   </thead>
   <tbody>
     <% @users.each do |user| %>
       <tr>
+        <td><%= user.code %></td>
+        <td><%= user.name %></td>
+        <td><%= user.kana %></td>
         <td><%= user.email %></td>
+        <td><%= user.sex %></td>
+        <td><%= user.birthday %></td>
       </tr>
     <% end %>
   </tbody>

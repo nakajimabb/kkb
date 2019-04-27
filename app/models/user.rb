@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  enum sex: {male: 1, female: 2}
+  enum sex: {unkonwn: 0, male: 1, female: 2}
 
   validates :code,
             uniqueness: { case_sensitive: :false },
@@ -12,6 +12,10 @@ class User < ApplicationRecord
 
   def name
     [last_name, first_name].join(' ')
+  end
+
+  def kana
+    [last_kana, first_kana].join(' ')
   end
 
   def name_with_code

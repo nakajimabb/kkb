@@ -4,16 +4,13 @@
     <title>Kkb</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
-    <%= stylesheet_link_tag 'application', media: 'all' %>
-    <%= javascript_pack_tag 'application' %>
   </head>
 
   <body>
-    <%= yield %>
-
+    <div id="app"></div>
+    <%= javascript_pack_tag 'application' %>
     <footer>
-      <% if user_signed_in? && !@is_menu %>
+      <% if user_signed_in? %>
         <%= current_user.name_with_code %> |
         <%= link_to "ログアウト", destroy_user_session_path, method: :delete, :class => 'navbar-link', :target => '_top'  %>
       <% end %>

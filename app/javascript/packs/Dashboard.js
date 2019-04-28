@@ -14,7 +14,10 @@ import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems, secondaryListItems } from './listItems';
+import { Route, Switch } from 'react-router-dom';
+import Sidebar from './Sidebar';
+import routes from './routes';
+
 
 const drawerWidth = 240;
 
@@ -159,12 +162,22 @@ class Dashboard extends React.Component {
             </IconButton>
           </div>
           <Divider />
-          <List>{mainListItems}</List>
-          <Divider />
-          <List>{secondaryListItems}</List>
+          <List><Sidebar /></List>
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
+          <Switch>
+            {routes.map((route, idx) => {
+              return (
+                <Route
+                  key={idx}
+                  path={route.path}
+                  exact={true}
+                  name={route.name}
+                  component={route.component} />
+              );
+            })}
+          </Switch>
         </main>
       </div>
     );

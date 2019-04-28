@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  kkb_type: 1
+  content: MyString
+  status: 1
+  user: one
+  openness: false
+  kkb_category: one
+
+two:
+  title: MyString
+  kkb_type: 1
+  content: MyString
+  status: 1
+  user: two
+  openness: false
+  kkb_category: two

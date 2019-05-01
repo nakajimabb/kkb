@@ -5,8 +5,8 @@ import GroupList from "./GroupList.js";
 
 var routes = [
   {
-    path: "/kkbs",
-    name: "Kkb list",
+    path: "/kkb_list",
+    name: "すべての板",
     component: KkbList,
   },
   {

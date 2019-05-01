@@ -4,14 +4,11 @@
     <title>Kkb</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
-    <%= stylesheet_link_tag 'application', media: 'all' %>
-    <%= javascript_pack_tag 'application' %>
   </head>
 
   <body>
-    <%= yield %>
-
+    <div id="app"></div>
+    <%= javascript_pack_tag 'index' %>
     <footer>
       <% if user_signed_in? %>
         <%= current_user.name_with_code %> |

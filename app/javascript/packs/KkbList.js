@@ -1,10 +1,11 @@
-import React, {Component} from "react";
+import React, { Component, Fragment } from "react";
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import TablePagination from '@material-ui/core/TablePagination';
 import env from './environment/index';
 
 
@@ -30,25 +31,41 @@ class KkbList extends Component {
     constructor(props) {
         super(props);
 
-        this.update_list = this.update_list.bind(this);
+        this.handleChangePage = this.handleChangePage.bind(this);
+        this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
+        this.updateList = this.updateList.bind(this);
+
         this.state = {
-            kkbs: []
+            kkbs: [],
+            page: 0,
+            per: 24,
+            count: 1000,
         };
     }
 
-    update_list() {
+    updateList(page, per) {
         const axios = require('axios');
-        axios.get(env.API_ORIGIN + 'kkbs/')
+        axios.get(env.API_ORIGIN + 'kkbs/', {params: {page: page + 1, per}})
           .then((results) => {
-              this.setState({kkbs: results.data});
-          })
-          .catch((data) =>{
-              alert('KKB一覧の取得の失敗しました。');
-          })
+              this.setState({kkbs: results.data.kkbs, count: results.data.total_count});
+        })
+        .catch((data) =>{
+            alert('KKB一覧の取得の失敗しました。');
+        })
     }
 
+    handleChangePage = (event, page) => {
+      this.setState({ page });
+      this.updateList(page, this.state.per);
+    };
+
+    handleChangeRowsPerPage = event => {
+      this.setState({ per: event.target.value });
+      this.updateList(this.state.page, event.target.value);
+    };
+
     componentDidMount() {
-        this.update_list()
+        this.updateList(this.state.page, this.state.per);
     }
 
     render() {
@@ -73,9 +90,26 @@ class KkbList extends Component {
       });
 
       return (
-        <Grid container spacing={16}>
-          {list}
-        </Grid>
+        <Fragment>
+          <Grid container spacing={16}>
+            {list}
+          </Grid>
+          <TablePagination
+            rowsPerPageOptions={[12, 24, 36, 60]}
+            component="div"
+            count={this.state.count}
+            rowsPerPage={this.state.per}
+            page={this.state.page}
+            backIconButtonProps={{
+              'aria-label': 'Previous Page'
+            }}
+            nextIconButtonProps={{
+              'aria-label': 'Next Page'
+            }}
+            onChangePage={this.handleChangePage}
+            onChangeRowsPerPage={this.handleChangeRowsPerPage}
+          />
+        </Fragment>
       );
   }
 }

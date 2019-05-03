@@ -12,7 +12,7 @@ class Sidebar extends React.Component {
   createLinks = routes => {
     return routes.map((prop, key) => {
       return (
-        <Link to={prop.path}>
+        <Link to={prop.path} key={key}>
           <ListItem button>
             <ListItemIcon>
               <DashboardIcon />

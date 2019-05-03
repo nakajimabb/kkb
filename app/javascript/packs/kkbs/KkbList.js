@@ -6,23 +6,20 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import TablePagination from '@material-ui/core/TablePagination';
-import env from './environment/index';
+import env from '../environment';
 
 
 const styles = {
-    card: {
-        minWidth: 100,
-    },
     title: {
         display: 'block',
         marginRight: '5px',
         overflow: 'hidden',
-        'white-space': 'nowrap',
-        'text-overflow': 'ellipsis',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
     },
     content: {
       fontSize: '90%',
-      height: '160px',
+      height: '150px',
       padding: '0 5px 10px 10px',
     },
 };
@@ -72,10 +69,10 @@ class KkbList extends Component {
       const classes = styles;
       const list = this.state.kkbs.map((kkb, index) => {
         return (
-          <Grid item xs={6} sm={4} md={3} lg={2} >
-            <Card className={classes.card} key={index}>
-              <CardActions style={classes.title}>
-                <Typography>
+          <Grid item xs={6} sm={4} md={3} lg={2} key={index}>
+            <Card>
+              <CardActions>
+                <Typography style={classes.title}>
                   <b>{kkb.id}</b>.{kkb.title}
                 </Typography>
               </CardActions>

@@ -26,14 +26,16 @@ class KkbBbs extends Component {
   }
 
   updateKkb(kkb_id) {
-    const axios = require('axios');
-    axios.get(env.API_ORIGIN + 'api/kkbs/' + kkb_id)
-      .then((results) => {
-        this.setState({kkb: results.data});
-      })
-      .catch((data) =>{
-        alert('KKBの取得の失敗しました。');
-      })
+    if(isFinite(kkb_id)) {
+      const axios = require('axios');
+      axios.get(env.API_ORIGIN + 'api/kkbs/' + kkb_id)
+        .then((results) => {
+          this.setState({kkb: results.data});
+        })
+        .catch((data) =>{
+          alert('KKBの取得の失敗しました。');
+        })
+    }
   }
 
   render() {
@@ -47,16 +49,15 @@ class KkbBbs extends Component {
         <AppBar>
           <Toolbar>
             <Typography color="inherit" variant="h6" style={{ flex: 1 }}>
-              {this.props.kkb_id} {this.state.kkb.title}
+              <b>{this.state.kkb.id}</b>. {this.state.kkb.title}
             </Typography>
             <IconButton color="inherit" onClick={this.props.onClose} aria-label="Close" >
               <CloseIcon />
             </IconButton>
           </Toolbar>
         </AppBar>
-
         <DialogTitle id="customized-dialog-title" onClose={this.props.onClose}>
-          Modal title
+          <b>{this.state.kkb.id}</b>. {this.state.kkb.title}
         </DialogTitle>
         <DialogContent>
           <Typography>

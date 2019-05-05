@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import TablePagination from '@material-ui/core/TablePagination';
 import { Link } from 'react-router-dom'
 import env from '../environment';
+import KkbBbs from "./KkbBbs";
 
 
 const styles = {
@@ -32,12 +33,15 @@ class KkbList extends Component {
         this.handleChangePage = this.handleChangePage.bind(this);
         this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
         this.updateList = this.updateList.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.handleClick = this.handleClick.bind(this);
 
         this.state = {
             kkbs: [],
             page: 0,
             per: 24,
             count: 1000,
+            current_id: NaN,
         };
     }
 
@@ -62,6 +66,14 @@ class KkbList extends Component {
       this.updateList(this.state.page, event.target.value);
     };
 
+    handleClick(event) {
+      this.setState({current_id: event.currentTarget.dataset.kkb_id});
+    };
+
+    handleClose(event) {
+      this.setState({current_id: NaN});
+    }
+
     componentDidMount() {
       this.updateList(this.state.page, this.state.per);
     }
@@ -77,13 +89,11 @@ class KkbList extends Component {
                   <b>{kkb.id}</b>.{kkb.title}
                 </Typography>
               </CardActions>
-              <Link to={`/kkbs/${kkb.id}`} style={{textDecoration: 'none', color: '#444'}} >
-                <CardActionArea>
-                  <CardContent data-kkb_id={kkb.id} style={classes.content}>
-                    <span dangerouslySetInnerHTML={{__html: kkb.content}} />
-                  </CardContent>
-                </CardActionArea>
-              </Link>
+              <CardActionArea>
+                <CardContent data-kkb_id={kkb.id} style={classes.content} onClick={this.handleClick}>
+                  <span dangerouslySetInnerHTML={{__html: kkb.content}} />
+                </CardContent>
+              </CardActionArea>
             </Card>
           </Grid>
         );
@@ -109,6 +119,10 @@ class KkbList extends Component {
             onChangePage={this.handleChangePage}
             onChangeRowsPerPage={this.handleChangeRowsPerPage}
           />
+          {(() => {
+            if(this.state.current_id)
+              return (<KkbBbs kkb_id={this.state.current_id} onClose={this.handleClose} />);
+          })()}
         </Fragment>
       );
   }

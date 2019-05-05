@@ -72,7 +72,7 @@ ActiveRecord::Schema.define(version: 2019_04_28_140100) do
   create_table "kkbs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "title", null: false
     t.integer "kkb_type", limit: 1, default: 1, null: false
-    t.string "content", null: false
+    t.text "content", null: false
     t.integer "status", null: false
     t.bigint "user_id"
     t.bigint "group_id"

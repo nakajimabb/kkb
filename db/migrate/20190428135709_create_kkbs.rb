@@ -3,7 +3,7 @@ class CreateKkbs < ActiveRecord::Migration[6.0]
     create_table :kkbs do |t|
       t.string :title, null: false
       t.integer :kkb_type, null: false, default: 1, limit: 1
-      t.string :content, null: false
+      t.text :content, null: false
       t.integer :status, null: false
       t.references :user, foreign_key: true
       t.references :group, foreign_key: true

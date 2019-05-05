@@ -4,13 +4,13 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import { Link } from 'react-router-dom'
-import routes from './routes';
+import nav from './nav';
 
 
 class Sidebar extends React.Component {
 
-  createLinks = routes => {
-    return routes.map((prop, key) => {
+  createLinks = nav => {
+    return nav.map((prop, key) => {
       return (
         <Link to={prop.path} key={key}>
           <ListItem button>
@@ -26,7 +26,7 @@ class Sidebar extends React.Component {
 
   render() {
     return (
-      <div>{this.createLinks(routes)}</div>
+      <div>{this.createLinks(nav)}</div>
     );
   }
 };

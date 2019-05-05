@@ -173,7 +173,6 @@ class Dashboard extends React.Component {
                   key={idx}
                   path={route.path}
                   exact={true}
-                  name={route.name}
                   component={route.component} />
               );
             })}

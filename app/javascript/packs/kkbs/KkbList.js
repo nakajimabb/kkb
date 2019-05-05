@@ -6,6 +6,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import TablePagination from '@material-ui/core/TablePagination';
+import { Link } from 'react-router-dom'
 import env from '../environment';
 
 
@@ -42,7 +43,7 @@ class KkbList extends Component {
 
     updateList(page, per) {
         const axios = require('axios');
-        axios.get(env.API_ORIGIN + 'kkbs/', {params: {page: page + 1, per}})
+        axios.get(env.API_ORIGIN + 'api/kkbs/', {params: {page: page + 1, per}})
           .then((results) => {
               this.setState({kkbs: results.data.kkbs, count: results.data.total_count});
         })
@@ -62,7 +63,7 @@ class KkbList extends Component {
     };
 
     componentDidMount() {
-        this.updateList(this.state.page, this.state.per);
+      this.updateList(this.state.page, this.state.per);
     }
 
     render() {
@@ -76,11 +77,13 @@ class KkbList extends Component {
                   <b>{kkb.id}</b>.{kkb.title}
                 </Typography>
               </CardActions>
-              <CardActionArea>
-                <CardContent style={classes.content}>
-                  {kkb.content}
-                </CardContent>
-              </CardActionArea>
+              <Link to={`/kkbs/${kkb.id}`} style={{textDecoration: 'none', color: '#444'}} >
+                <CardActionArea>
+                  <CardContent data-kkb_id={kkb.id} style={classes.content}>
+                    <span dangerouslySetInnerHTML={{__html: kkb.content}} />
+                  </CardContent>
+                </CardActionArea>
+              </Link>
             </Card>
           </Grid>
         );

@@ -3,10 +3,12 @@ Rails.application.routes.draw do
 
   devise_for :users
 
+  resources :kkbs, :only => [:new, :create, :edit, :update]
+
   scope :api do
     resources :users
     resources :groups
-    resources :kkbs
+    resources :kkbs, :only => [:index, :show]
   end
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

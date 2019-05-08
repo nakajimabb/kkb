@@ -6,13 +6,16 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import TablePagination from '@material-ui/core/TablePagination';
-import { Link } from 'react-router-dom'
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
 import env from '../environment';
 import KkbBbs from "./KkbBbs";
 
 
 const styles = {
     title: {
+        flex: 1,
         display: 'block',
         marginRight: '5px',
         overflow: 'hidden',
@@ -23,8 +26,22 @@ const styles = {
       fontSize: '90%',
       height: '150px',
       padding: '0 5px 10px 10px',
+      whiteSpace: 'pre-line',
     },
+  button: {
+    width: 24,
+    height: 24,
+    padding: 0
+  },
+  icon: {
+    fontSize: 14,
+    color: '#fffff'
+  },
+  tooltip: {
+    marginLeft: 2
+  },
 };
+
 
 class KkbList extends Component {
     constructor(props) {
@@ -80,6 +97,9 @@ class KkbList extends Component {
 
     render() {
       const classes = styles;
+      const { anchorEl } = this.state;
+      let menu_id = anchorEl ? anchorEl.dataset.kkb_id : null;
+
       const list = this.state.kkbs.map((kkb, index) => {
         return (
           <Grid item xs={6} sm={4} md={3} lg={2} key={index}>
@@ -88,10 +108,24 @@ class KkbList extends Component {
                 <Typography style={classes.title}>
                   <b>{kkb.id}</b>.{kkb.title}
                 </Typography>
+                <a data-remote="true" href={`/kkbs/${kkb.id}/edit`} >
+                  <IconButton
+                    aria-label="More"
+                    aria-owns={open ? 'long-menu' : undefined}
+                    aria-haspopup="true"
+                    data-kkb_id={kkb.id}
+                    style={classes.button}
+                    iconStyle={classes.icon}
+                    tooltipStyles={classes.tooltip}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </a>
               </CardActions>
+              <Divider />
               <CardActionArea>
                 <CardContent data-kkb_id={kkb.id} style={classes.content} onClick={this.handleClick}>
-                  <span dangerouslySetInnerHTML={{__html: kkb.content}} />
+                  {kkb.headline}
                 </CardContent>
               </CardActionArea>
             </Card>

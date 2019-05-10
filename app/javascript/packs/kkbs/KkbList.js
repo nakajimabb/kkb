@@ -23,7 +23,7 @@ const styles = {
         textOverflow: 'ellipsis',
     },
     content: {
-      fontSize: '90%',
+      fontSize: '75%',
       height: '150px',
       padding: '0 5px 10px 10px',
       whiteSpace: 'pre-line',
@@ -139,7 +139,7 @@ class KkbList extends Component {
             {list}
           </Grid>
           <TablePagination
-            rowsPerPageOptions={[12, 24, 36, 60]}
+            rowsPerPageOptions={[12, 18, 24, 36, 60]}
             component="div"
             count={this.state.count}
             rowsPerPage={this.state.per}

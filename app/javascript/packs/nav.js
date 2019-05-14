@@ -5,11 +5,11 @@ var nav = [
   },
   {
     path: "/users",
-    name: "User list",
+    name: "社員管理",
   },
   {
     path: "/groups",
-    name: "Group list",
+    name: "グループ管理",
   }
 ];
 

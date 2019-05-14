@@ -160,6 +160,7 @@ class UserList extends React.Component {
   render() {
     const { classes } = this.props;
     const { users, rowsPerPage, page, count } = this.state;
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, count - page * rowsPerPage);
 
     return (
       <Paper className={classes.root}>
@@ -184,11 +185,16 @@ class UserList extends React.Component {
                   <TableCell>{user.birthday}</TableCell>
                 </TableRow>
               ))}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 48 * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
             </TableBody>
             <TableFooter>
               <TableRow>
                 <TablePagination
-                  rowsPerPageOptions={[10, 20, 50]}
+                  rowsPerPageOptions={[10, 15, 20, 50]}
                   colSpan={3}
                   count={count}
                   rowsPerPage={rowsPerPage}

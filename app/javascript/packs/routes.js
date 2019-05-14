@@ -1,7 +1,7 @@
 import KkbList from "./kkbs/KkbList.js";
 import KkbShow from "./kkbs/KkbShow.js";
-import UserList from "./UserList.js";
-import GroupList from "./GroupList.js";
+import UserList from "./users/UserList.js";
+import GroupList from "./groups/GroupList.js";
 
 
 var routes = [

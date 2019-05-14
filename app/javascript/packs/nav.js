@@ -1,8 +1,3 @@
-import KkbList from "./kkbs/KkbList.js";
-import UserList from "./UserList.js";
-import GroupList from "./GroupList.js";
-
-
 var nav = [
   {
     path: "/kkbs",

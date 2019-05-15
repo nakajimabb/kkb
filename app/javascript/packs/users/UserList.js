@@ -1,5 +1,6 @@
 // https://material-ui.com/demos/tables/
 import React from 'react';
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -15,6 +16,7 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
+import EditIcon from '@material-ui/icons/Edit';
 import env from "../environment";
 
 
@@ -172,6 +174,7 @@ class UserList extends React.Component {
                 <CustomTableCell>社員番号</CustomTableCell>
                 <CustomTableCell>email</CustomTableCell>
                 <CustomTableCell>誕生日</CustomTableCell>
+                <CustomTableCell></CustomTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -183,6 +186,18 @@ class UserList extends React.Component {
                   <TableCell>{user.code}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>{user.birthday}</TableCell>
+                  <TableCell>
+                    <Link to={`/users/${user.id}/edit`} className="linked-card">
+                      <IconButton
+                        aria-label="More"
+                        data-user_id={user.id}
+                        style={classes.button}
+                        iconStyle={classes.icon}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </Link>
+                  </TableCell>
                 </TableRow>
               ))}
               {emptyRows > 0 && (

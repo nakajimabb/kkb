@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
-  protect_from_forgery :except => :update
 
   def index
     per = params[:per].to_i.clamp(10, 60)

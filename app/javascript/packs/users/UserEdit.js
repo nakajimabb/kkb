@@ -11,6 +11,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { withStyles } from "@material-ui/core/styles";
+import axios from 'axios';
+import { csrfToken } from '@rails/ujs';
 import env from "../environment";
 
 
@@ -42,6 +44,7 @@ class UserEdit extends Component {
     super(props);
     this.onClose = this.onClose.bind(this);
     this.saveUser = this.saveUser.bind(this);
+    axios.defaults.headers.common['X-CSRF-Token'] = csrfToken();
   }
 
   componentDidMount() {
@@ -60,7 +63,6 @@ class UserEdit extends Component {
 
   showUser(user_id) {
     if(isFinite(user_id)) {
-      const axios = require('axios');
       axios.get(env.API_ORIGIN + `api/users/${user_id}/edit`)
         .then((results) => {
           this.setState({user: results.data});
@@ -72,7 +74,6 @@ class UserEdit extends Component {
   }
 
   saveUser() {
-    const axios = require('axios');
     axios.patch(env.API_ORIGIN + `api/users/${this.state.user.id}`, this.state.user)
       .then((results) => {
         this.setState({user: results.data});

@@ -11,8 +11,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { withStyles } from "@material-ui/core/styles";
-import axios from 'axios';
 import { csrfToken } from '@rails/ujs';
+import axios from "../axios";
 import env from "../environment";
 
 

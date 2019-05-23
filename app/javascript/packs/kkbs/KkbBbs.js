@@ -1,14 +1,13 @@
 import React, { Component } from "react";
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
+import axios from "../axios";
 import env from "../environment";
 
 
@@ -27,7 +26,6 @@ class KkbBbs extends Component {
 
   updateKkb(kkb_id) {
     if(isFinite(kkb_id)) {
-      const axios = require('axios');
       axios.get(env.API_ORIGIN + 'api/kkbs/' + kkb_id)
         .then((results) => {
           this.setState({kkb: results.data});

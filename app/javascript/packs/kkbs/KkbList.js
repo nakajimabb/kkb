@@ -9,6 +9,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
+import axios from "../axios";
 import env from '../environment';
 import KkbBbs from "./KkbBbs";
 
@@ -63,7 +64,6 @@ class KkbList extends Component {
     }
 
     updateList(page, per) {
-        const axios = require('axios');
         axios.get(env.API_ORIGIN + 'api/kkbs/', {params: {page: page + 1, per}})
           .then((results) => {
               this.setState({kkbs: results.data.kkbs, count: results.data.total_count});

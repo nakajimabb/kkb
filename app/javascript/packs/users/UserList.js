@@ -17,6 +17,9 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import EditIcon from '@material-ui/icons/Edit';
+import Grid from '@material-ui/core/Grid';
+import Input from '@material-ui/core/Input';
+import axios from "../axios";
 import env from "../environment";
 
 
@@ -31,6 +34,16 @@ const CustomTableCell = withStyles(theme => ({
 }))(TableCell);
 
 const styles = theme => ({
+  container: {
+    margin: 0,
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  input: {
+    marginRight: theme.spacing.unit,
+    marginTop: 0,
+    marginBottom: 0,
+  },
   root: {
     width: '100%',
     marginTop: theme.spacing.unit * 3,
@@ -126,27 +139,43 @@ const TablePaginationActionsWrapped = withStyles(actionsStyles, { withTheme: tru
 );
 
 class UserList extends React.Component {
-  state = {
-    users: [],
-    page: 0,
-    rowsPerPage: 10,
-    count: 0,
+  constructor(props) {
+    super(props);
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleChangePage = this.handleChangePage.bind(this);
+    this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
+
+    this.state = {
+      users: [],
+      page: 0,
+      rowsPerPage: 10,
+      count: 0,
+      search: {},
+    };
+  }
+
+  handleChange = name => event => {
+    let search = this.state.search;
+    search[name] = event.target.value;
+    this.setState({ search, page: 0 });
+    this.updateList(0, this.state.rowsPerPage, search);
   };
 
   handleChangePage = (event, page) => {
     this.setState({ page });
-    this.updateList(page, this.state.rowsPerPage);
+    this.updateList(page, this.state.rowsPerPage, this.state.search);
   };
 
   handleChangeRowsPerPage = event => {
     let rows_per_page = +event.target.value;
     this.setState({ page: 0, rowsPerPage: rows_per_page });
-    this.updateList(this.state.page, rows_per_page);
+    this.updateList(0, rows_per_page, this.state.search);
   };
 
-  updateList(page, per) {
-    const axios = require('axios');
-    axios.get(env.API_ORIGIN + 'api/users/', {params: {page: page + 1, per}})
+  updateList(page, per, search) {
+    let params = { page: page + 1, per, search} ;
+    axios.get(env.API_ORIGIN + 'api/users/', { params })
       .then((results) => {
         this.setState({users: results.data.users, count: results.data.total_count});
       })
@@ -165,67 +194,87 @@ class UserList extends React.Component {
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, count - page * rowsPerPage);
 
     return (
-      <Paper className={classes.root}>
-        <div className={classes.tableWrapper}>
-          <Table className={classes.table}>
-            <TableHead>
-              <TableRow>
-                <CustomTableCell>氏名</CustomTableCell>
-                <CustomTableCell>社員番号</CustomTableCell>
-                <CustomTableCell>email</CustomTableCell>
-                <CustomTableCell>誕生日</CustomTableCell>
-                <CustomTableCell></CustomTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {users.map(user => (
-                <TableRow key={user.id}>
-                  <TableCell component="th" scope="row">
-                    {user.last_name} {user.first_name}
-                  </TableCell>
-                  <TableCell>{user.code}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.birthday}</TableCell>
-                  <TableCell>
-                    <Link to={`/users/${user.id}/edit`} className="linked-card">
-                      <IconButton
-                        aria-label="More"
-                        data-user_id={user.id}
-                        style={classes.button}
-                        iconStyle={classes.icon}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                    </Link>
-                  </TableCell>
+      <div>
+        <Grid container>
+          <Input
+            id="user_name"
+            name="user_name"
+            placeholder="氏名・カナ・社員番号"
+            className={classes.input}
+            onChange={this.handleChange('name')}
+            margin="normal"
+          />
+          <Input
+            id="user_email"
+            name="user_email"
+            placeholder="Email"
+            className={classes.input}
+            onChange={this.handleChange('email')}
+            margin="normal"
+          />
+        </Grid>
+        <Paper className={classes.root}>
+          <div className={classes.tableWrapper}>
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <CustomTableCell>氏名</CustomTableCell>
+                  <CustomTableCell>社員番号</CustomTableCell>
+                  <CustomTableCell>email</CustomTableCell>
+                  <CustomTableCell>誕生日</CustomTableCell>
+                  <CustomTableCell></CustomTableCell>
                 </TableRow>
-              ))}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 48 * emptyRows }}>
-                  <TableCell colSpan={6} />
+              </TableHead>
+              <TableBody>
+                {users.map(user => (
+                  <TableRow key={user.id}>
+                    <TableCell component="th" scope="row">
+                      {user.last_name} {user.first_name}
+                    </TableCell>
+                    <TableCell>{user.code}</TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.birthday}</TableCell>
+                    <TableCell>
+                      <Link to={`/users/${user.id}/edit`} className="linked-card">
+                        <IconButton
+                          aria-label="More"
+                          data-user_id={user.id}
+                          style={classes.button}
+                          iconStyle={classes.icon}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 48 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[10, 15, 20, 50]}
+                    colSpan={3}
+                    count={count}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      native: true,
+                    }}
+                    onChangePage={this.handleChangePage}
+                    onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActionsWrapped}
+                  />
                 </TableRow>
-              )}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[10, 15, 20, 50]}
-                  colSpan={3}
-                  count={count}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  SelectProps={{
-                    native: true,
-                  }}
-                  onChangePage={this.handleChangePage}
-                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActionsWrapped}
-                />
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </div>
-      </Paper>
+              </TableFooter>
+            </Table>
+          </div>
+        </Paper>
+      </div>
     );
   }
 }

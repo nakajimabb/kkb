@@ -3,7 +3,17 @@ class UsersController < ApplicationController
 
   def index
     per = params[:per].to_i.clamp(10, 60)
-    @users = User.all.page(params[:page]).per(per)
+    @users = User.all
+    if params[:search]
+      p = params[:search]
+      if p[:name].present?
+        @users = @users.search_users(p[:name])
+      end
+      if p[:email].present?
+        @users = @users.where('email LIKE ?', '%' + p[:email] + '%')
+      end
+    end
+    @users = @users.page(params[:page]).per(per)
     render json: {users: @users, total_count: @users.total_count}
   end
 

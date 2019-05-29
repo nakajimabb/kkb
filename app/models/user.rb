@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  enum sex: {unkonwn: 0, male: 1, female: 2}
+  enum sex: {unknown: 0, male: 1, female: 2}
 
   validates :code,
             uniqueness: { case_sensitive: :false },

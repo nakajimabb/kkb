@@ -10,6 +10,10 @@ import Grid from '@material-ui/core/Grid';
 import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
 import { withStyles } from "@material-ui/core/styles";
 import { csrfToken } from '@rails/ujs';
 import { str } from "../tools";
@@ -32,6 +36,13 @@ const styles = theme => ({
   },
   menu: {
     width: 200,
+  },
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: 2 * theme.spacing.unit,
   },
 });
 
@@ -185,6 +196,23 @@ class UserForm extends Component {
               margin="normal"
               required
             />
+          </Grid>
+          <Grid container>
+            <FormControl className={classes.formControl}>
+              <InputLabel shrink htmlFor="user_sex">sex</InputLabel>
+              <Select
+                value={this.state.user.sex}
+                onChange={this.handleChange('sex')}
+                inputProps={{
+                  name: 'user_sex',
+                  id: 'user_sex',
+                }}
+              >
+                <MenuItem value={'unknown'}></MenuItem>
+                <MenuItem value={'male'}>male</MenuItem>
+                <MenuItem value={'female'}>female</MenuItem>
+              </Select>
+            </FormControl>
           </Grid>
           <Grid container>
             <TextField

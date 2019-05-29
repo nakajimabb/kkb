@@ -17,12 +17,26 @@ class UsersController < ApplicationController
     render json: {users: @users, total_count: @users.total_count}
   end
 
-  def edit
+  def new
+    @user = User.new
     render json: @user
   end
 
+  def create
+    p = user_params
+    p.merge!(password: params[:password], password_confirmation: params[:password_confirmation]) if params[:password] || params[:password_confirmation]
+    @user = User.create(p)
+    render json: @user
+  end
+
+  def edit
+    render json: @user.to_json
+  end
+
   def update
-    @user.update_attributes(user_params)
+    p = user_params
+    p.merge!(password: params[:password], password_confirmation: params[:password_confirmation]) if params[:password] || params[:password_confirmation]
+    @user.update_attributes(p)
     render json: @user
   end
 

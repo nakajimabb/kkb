@@ -1,6 +1,7 @@
 import KkbList from "./kkbs/KkbList.js";
 import KkbShow from "./kkbs/KkbShow.js";
 import UserList from "./users/UserList.js";
+import UserNew from "./users/UserNew.js";
 import UserEdit from "./users/UserEdit.js";
 import GroupList from "./groups/GroupList.js";
 
@@ -10,6 +11,7 @@ var routes = [
   { path: "/kkbs/:id", component: KkbShow },
   { path: "/users", component: UserList },
   { path: "/users/:id/edit", component: UserEdit },
+  { path: "/users/new", component: UserNew },
   { path: "/groups", component: GroupList },
 ];
 

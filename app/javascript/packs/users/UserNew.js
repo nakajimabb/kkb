@@ -7,10 +7,8 @@ class UserEdit extends Component {
     super(props);
   }
   render() {
-    const user_id = this.props.user_id || this.props.match.params.id;
-
     return (
-      <UserForm user_id={user_id} history={this.props.history} onClose={this.props.onClose} />
+      <UserForm history={this.props.history} onClose={this.props.onClose} />
     );
   }
 }

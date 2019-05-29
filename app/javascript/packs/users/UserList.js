@@ -1,6 +1,5 @@
 // https://material-ui.com/demos/tables/
 import React from 'react';
-import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -18,7 +17,11 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import EditIcon from '@material-ui/icons/Edit';
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
+import Button from '@material-ui/core/Button';
+import UserNew from "../users/UserNew";
+import UserEdit from "../users/UserEdit";
 import axios from "../axios";
 import env from "../environment";
 
@@ -145,6 +148,9 @@ class UserList extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleChangePage = this.handleChangePage.bind(this);
     this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
+    this.handleClickUserNew = this.handleClickUserNew.bind(this);
+    this.handleClickUserEdit = this.handleClickUserEdit.bind(this);
+    this.onCloseUserForm = this.onCloseUserForm.bind(this);
 
     this.state = {
       users: [],
@@ -152,6 +158,8 @@ class UserList extends React.Component {
       rowsPerPage: 10,
       count: 0,
       search: {},
+      current_id: null,
+      new_user: false,
     };
   }
 
@@ -171,6 +179,18 @@ class UserList extends React.Component {
     let rows_per_page = +event.target.value;
     this.setState({ page: 0, rowsPerPage: rows_per_page });
     this.updateList(0, rows_per_page, this.state.search);
+  };
+
+  handleClickUserNew = (event) => {
+    this.setState({ new_user: true });
+  };
+
+  handleClickUserEdit = (event) => {
+    this.setState({ current_id: event.currentTarget.dataset.user_id });
+  };
+
+  onCloseUserForm = (event) => {
+    this.setState({ new_user: null, current_id: null });
   };
 
   updateList(page, per, search) {
@@ -212,6 +232,10 @@ class UserList extends React.Component {
             onChange={this.handleChange('email')}
             margin="normal"
           />
+          <Typography style={{ flex: 1 }} />
+          <Button variant="outlined" onClick={this.handleClickUserNew} color="primary" className={classes.input}>
+            追加
+          </Button>
         </Grid>
         <Paper className={classes.root}>
           <div className={classes.tableWrapper}>
@@ -235,16 +259,15 @@ class UserList extends React.Component {
                     <TableCell>{user.email}</TableCell>
                     <TableCell>{user.birthday}</TableCell>
                     <TableCell>
-                      <Link to={`/users/${user.id}/edit`} className="linked-card">
-                        <IconButton
-                          aria-label="More"
-                          data-user_id={user.id}
-                          style={classes.button}
-                          iconStyle={classes.icon}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                      </Link>
+                      <IconButton
+                        aria-label="More"
+                        data-user_id={user.id}
+                        style={classes.button}
+                        iconStyle={classes.icon}
+                        onClick={this.handleClickUserEdit}
+                      >
+                        <EditIcon />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -274,6 +297,14 @@ class UserList extends React.Component {
             </Table>
           </div>
         </Paper>
+        {(() => {
+          if(this.state.new_user)
+            return (<UserNew onClose={this.onCloseUserForm} />);
+        })()}
+        {(() => {
+          if(this.state.current_id)
+            return (<UserEdit user_id={this.state.current_id} onClose={this.onCloseUserForm} />);
+        })()}
       </div>
     );
   }

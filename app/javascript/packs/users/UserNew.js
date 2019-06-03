@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import UserForm from "./UserForm"
 
 
-class UserEdit extends Component {
+class UserNew extends Component {
   constructor(props) {
     super(props);
   }
@@ -13,4 +13,4 @@ class UserEdit extends Component {
   }
 }
 
-export default UserEdit;
+export default UserNew;

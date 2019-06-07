@@ -1,6 +1,16 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
+  def autocomplete
+    if params[:name].present?
+      users = User.search_users(params[:name]).limit(100)
+    else
+      users = User.none
+    end
+    users = users.map{ |u| {id: u.id, code: u.code, name: u.name, kana: u.kana} }
+    render json: users
+  end
+
   def index
     per = params[:per].to_i.clamp(10, 60)
     @users = User.all
@@ -47,6 +57,6 @@ private
   end
 
   def user_params
-    params.require(:user).permit(:email, :code, :first_name, :last_name, :first_kana, :last_kana, :birthday, :sex)
+    params.require(:user).permit(User::REGISTRABLE_ATTRIBUTES)
   end
 end

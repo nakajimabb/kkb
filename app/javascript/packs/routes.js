@@ -4,6 +4,8 @@ import UserList from "./users/UserList.js";
 import UserNew from "./users/UserNew.js";
 import UserEdit from "./users/UserEdit.js";
 import GroupList from "./groups/GroupList.js";
+import GroupNew from "./groups/GroupNew.js";
+import GroupEdit from "./groups/GroupEdit.js";
 
 
 var routes = [
@@ -13,6 +15,8 @@ var routes = [
   { path: "/users/:id/edit", component: UserEdit },
   { path: "/users/new", component: UserNew },
   { path: "/groups", component: GroupList },
+  { path: "/groups/:id/edit", component: GroupEdit },
+  { path: "/groups/new", component: GroupNew },
 ];
 
 export default routes;

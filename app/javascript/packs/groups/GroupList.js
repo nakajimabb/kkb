@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router-dom'
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -17,7 +16,11 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import EditIcon from '@material-ui/icons/Edit';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
+import Typography from '@material-ui/core/Typography';
+import GroupNew from "../groups/GroupNew";
+import GroupEdit from "../groups/GroupEdit";
 import axios from "../axios";
 import env from "../environment";
 
@@ -143,6 +146,9 @@ class GroupList extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleChangePage = this.handleChangePage.bind(this);
     this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
+    this.handleClickGroupNew = this.handleClickGroupNew.bind(this);
+    this.handleClickGroupEdit = this.handleClickGroupEdit.bind(this);
+    this.onCloseGroupForm = this.onCloseGroupForm.bind(this);
 
     this.state = {
       groups: [],
@@ -151,6 +157,8 @@ class GroupList extends React.Component {
       rowsPerPage: 10,
       count: 0,
       search: {},
+      current_id: null,
+      new_group: false,
     };
   }
 
@@ -170,6 +178,18 @@ class GroupList extends React.Component {
     let rows_per_page = +event.target.value;
     this.setState({ page: 0, rowsPerPage: rows_per_page });
     this.updateList(0, rows_per_page, this.state.search);
+  };
+
+  handleClickGroupNew = (event) => {
+    this.setState({ new_group: true });
+  };
+
+  handleClickGroupEdit = (event) => {
+    this.setState({ current_id: event.currentTarget.dataset.group_id });
+  };
+
+  onCloseGroupForm = (event) => {
+    this.setState({ new_group: null, current_id: null });
   };
 
   updateList(page, per, search) {
@@ -203,6 +223,10 @@ class GroupList extends React.Component {
               onChange={this.handleChange('name')}
               margin="dense"
           />
+          <Typography style={{ flex: 1 }} />
+          <Button variant="outlined" onClick={this.handleClickGroupNew} color="primary" className={classes.input}>
+            追加
+          </Button>
         </Grid>
         <Paper className={classes.root}>
           <div className={classes.tableWrapper}>
@@ -217,6 +241,7 @@ class GroupList extends React.Component {
                   <CustomTableCell>名前</CustomTableCell>
                   <CustomTableCell>コード</CustomTableCell>
                   <CustomTableCell>メンバー</CustomTableCell>
+                  <CustomTableCell></CustomTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -227,9 +252,20 @@ class GroupList extends React.Component {
                       <CustomTableCell>{group.code}</CustomTableCell>
                       <CustomTableCell>
                         {users[group.id].map(
-                            elem => elem['code'] + ':' + elem['last_name'] + ' ' + elem['first_name']
-                        ).join(',')}
+                            elem => elem['last_name'] + ' ' + elem['first_name'] + '(' + elem['code'] + ')'
+                        ).join(', ')}
                       </CustomTableCell>
+                      <TableCell>
+                        <IconButton
+                          aria-label="More"
+                          data-group_id={group.id}
+                          style={classes.button}
+                          iconStyle={classes.icon}
+                          onClick={this.handleClickGroupEdit}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
                 ))}
                 {emptyRows > 0 && (
@@ -256,6 +292,14 @@ class GroupList extends React.Component {
                 </TableRow>
               </TableFooter>
             </Table>
+            {(() => {
+              if(this.state.new_group)
+                return (<GroupNew onClose={this.onCloseGroupForm} />);
+            })()}
+            {(() => {
+              if(this.state.current_id)
+                return (<GroupEdit group_id={this.state.current_id} onClose={this.onCloseGroupForm} />);
+            })()}
           </div>
         </Paper>
       </div>

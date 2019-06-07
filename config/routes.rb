@@ -6,10 +6,11 @@ Rails.application.routes.draw do
   resources :kkbs, :only => [:new, :create, :edit, :update]
 
   scope :api do
+    get '/users/autocomplete'
     resources :users
     resources :groups
-    resources :kkbs, :only => [:index, :show]
     get '/kkbs/all'
+    resources :kkbs, :only => [:index, :show]
   end
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  REGISTRABLE_ATTRIBUTES = %i(code email first_name last_name first_kana last_kana birthday sex)
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,

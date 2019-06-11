@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import Select from 'react-select';
+import Async from 'react-select/async';
 import { emphasize, makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import NoSsr from '@material-ui/core/NoSsr';
@@ -251,6 +252,34 @@ export default function ReactSelect(props) {
           components={components}
           placeholder={props.placeholder}
           options={props.options}
+          value={props.value}
+          onChange={props.onChange}
+          isClearable={props.isClearable}
+        />
+      </NoSsr>
+    </div>
+  );
+}
+
+export function AsyncSelect(props) {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.root} style={props.style}>
+      <NoSsr>
+        <Async
+          classes={classes}
+          inputId="react-select-single"
+          TextFieldProps={{
+            label: props.label,
+            InputLabelProps: {
+              htmlFor: 'react-select-single',
+              shrink: true,
+            },
+          }}
+          components={components}
+          placeholder={props.placeholder}
+          loadOptions={props.loadOptions}
           value={props.value}
           onChange={props.onChange}
           isClearable={props.isClearable}

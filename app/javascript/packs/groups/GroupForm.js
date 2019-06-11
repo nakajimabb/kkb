@@ -10,12 +10,12 @@ import Grid from '@material-ui/core/Grid';
 import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import AsyncSelect from 'react-select/async';
 import { withStyles } from "@material-ui/core/styles";
 import { csrfToken } from '@rails/ujs';
 import { str } from "../tools";
 import axios from "../axios";
 import env from "../environment";
+import { AsyncSelect } from "../react-select/ReactSelect";
 
 
 const styles = theme => ({
@@ -189,10 +189,13 @@ class GroupForm extends Component {
               <Grid container>
                 <AsyncSelect
                   className={classes.select}
-                  value={{value: group_user.user_id, label: group_user.user_label}}
+                  style={{marginTop: 0, marginBottom: 0}}
+                  value={group_user.user_id ? {value: group_user.user_id, label: group_user.user_label} : null}
                   loadOptions={this.getUsers}
                   onChange={this.onChangeUser(index)}
                   isClearable={group_user.user_id}
+                  // label="member's name"
+                  placeholder="code or name"
                 />
               </Grid>
             );

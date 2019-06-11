@@ -10,6 +10,9 @@ import Grid from '@material-ui/core/Grid';
 import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone';
 import { withStyles } from "@material-ui/core/styles";
 import { csrfToken } from '@rails/ujs';
 import { str } from "../tools";
@@ -44,6 +47,10 @@ const styles = theme => ({
   select: {
     width: 200,
   },
+  icon: {
+    margin: theme.spacing(1),
+    padding: 1,
+  }
 });
 
 class GroupForm extends Component {
@@ -58,7 +65,9 @@ class GroupForm extends Component {
     this.saveGroup = this.saveGroup.bind(this);
     this.axiosProc = this.axiosProc.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.onChangeUser = this.onChangeUser.bind(this);
+    this.onSelectGroupUser = this.onSelectGroupUser.bind(this);
+    this.onChangeGroupUser = this.onChangeGroupUser.bind(this);
+    this.onDeleteGroupUser = this.onDeleteGroupUser.bind(this);
     axios.defaults.headers.common['X-CSRF-Token'] = csrfToken();
   }
 
@@ -79,7 +88,7 @@ class GroupForm extends Component {
     this.setState({ group: Object.assign(group, { [name]: event.target.value })});
   };
 
-  onChangeUser = index => value => {
+  onSelectGroupUser = index => value => {
     let group_user = this.state.group.group_users_attributes[index];
     if(value) {
       group_user.user_id = value.value;
@@ -88,6 +97,18 @@ class GroupForm extends Component {
       group_user.user_id = null;
       group_user.user_label = null;
     }
+    this.setState({ group: this.state.group});
+  };
+
+  onChangeGroupUser = index => event => {
+    let group_user = this.state.group.group_users_attributes[index];
+    group_user.member_type = event.target.value;
+    this.setState({ group: this.state.group});
+  };
+
+  onDeleteGroupUser = index => event => {
+    let group_user = this.state.group.group_users_attributes[index];
+    group_user._destroy = 1;
     this.setState({ group: this.state.group});
   };
 
@@ -185,18 +206,34 @@ class GroupForm extends Component {
             />
           </Grid>
           {this.state.group.group_users_attributes.map((group_user, index) => {
-            return (
+            return group_user._destroy ? null :
+            (
               <Grid container>
                 <AsyncSelect
                   className={classes.select}
                   style={{marginTop: 0, marginBottom: 0}}
                   value={group_user.user_id ? {value: group_user.user_id, label: group_user.user_label} : null}
                   loadOptions={this.getUsers}
-                  onChange={this.onChangeUser(index)}
+                  onChange={this.onSelectGroupUser(index)}
                   isClearable={group_user.user_id}
                   // label="member's name"
                   placeholder="code or name"
                 />
+                <Select
+                  value={group_user.member_type}
+                  onChange={this.onChangeGroupUser(index)}
+                >
+                  <MenuItem value={'normal'}>normal</MenuItem>
+                  <MenuItem value={'hidden'}>hidden</MenuItem>
+                </Select>
+                <IconButton
+                  aria-label="Delete"
+                  size="small"
+                  className={classes.icon}
+                  onClick={this.onDeleteGroupUser(index)}
+                >
+                  <DeleteTwoToneIcon fontSize="inherit" />
+                </IconButton>
               </Grid>
             );
           })

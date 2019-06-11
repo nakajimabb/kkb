@@ -1,5 +1,5 @@
 class GroupUser < ApplicationRecord
-  REGISTRABLE_ATTRIBUTES = %i(id group_id user_id member_type)
+  REGISTRABLE_ATTRIBUTES = %i(id group_id user_id member_type _destroy)
 
   belongs_to :group
   belongs_to :user

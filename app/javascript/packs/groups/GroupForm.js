@@ -12,7 +12,8 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone';
+import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { withStyles } from "@material-ui/core/styles";
 import { csrfToken } from '@rails/ujs';
 import { str } from "../tools";
@@ -50,7 +51,7 @@ const styles = theme => ({
   icon: {
     margin: theme.spacing(1),
     padding: 1,
-  }
+  },
 });
 
 class GroupForm extends Component {
@@ -67,6 +68,7 @@ class GroupForm extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.onSelectGroupUser = this.onSelectGroupUser.bind(this);
     this.onChangeGroupUser = this.onChangeGroupUser.bind(this);
+    this.onAddGroupUser = this.onAddGroupUser.bind(this);
     this.onDeleteGroupUser = this.onDeleteGroupUser.bind(this);
     axios.defaults.headers.common['X-CSRF-Token'] = csrfToken();
   }
@@ -103,6 +105,11 @@ class GroupForm extends Component {
   onChangeGroupUser = index => event => {
     let group_user = this.state.group.group_users_attributes[index];
     group_user.member_type = event.target.value;
+    this.setState({ group: this.state.group});
+  };
+
+  onAddGroupUser = event => {
+    this.state.group.group_users_attributes.push({member_type: 'normal'});
     this.setState({ group: this.state.group});
   };
 
@@ -205,6 +212,9 @@ class GroupForm extends Component {
               required
             />
           </Grid>
+          <Typography variant="h6" style={{margin: 10}}>
+            member list
+          </Typography>
           {this.state.group.group_users_attributes.map((group_user, index) => {
             return group_user._destroy ? null :
             (
@@ -232,12 +242,17 @@ class GroupForm extends Component {
                   className={classes.icon}
                   onClick={this.onDeleteGroupUser(index)}
                 >
-                  <DeleteTwoToneIcon fontSize="inherit" />
+                  <DeleteIcon fontSize="inherit" />
                 </IconButton>
               </Grid>
             );
           })
           }
+          <Grid container style={{margin: 10}}>
+            <Button variant="outlined" color="primary" size="small" onClick={this.onAddGroupUser} >
+              Add Member
+            </Button>
+          </Grid>
         </DialogContent>
       </Dialog>
     );

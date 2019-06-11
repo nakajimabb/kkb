@@ -24,7 +24,7 @@ class Group < ApplicationRecord
 
   def nested_attributes
     p = permitted_attributes
-    p[:group_users_attributes]  = group_users.eager_load(:user).map do |group_user|
+    p[:group_users_attributes]  = group_users.eager_load(:user).order(:id).map do |group_user|
       user = group_user.user
       group_user.permitted_attributes.merge(user_code: user.code, user_label: user.name_with_code)
     end

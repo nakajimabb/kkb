@@ -81,8 +81,13 @@ class GroupForm extends Component {
 
   onChangeUser = index => value => {
     let group_user = this.state.group.group_users_attributes[index];
-    group_user.user_id = value.value;
-    group_user.user_label = value.label;
+    if(value) {
+      group_user.user_id = value.value;
+      group_user.user_label = value.label;
+    } else {
+      group_user.user_id = null;
+      group_user.user_label = null;
+    }
     this.setState({ group: this.state.group});
   };
 
@@ -187,6 +192,7 @@ class GroupForm extends Component {
                   value={{value: group_user.user_id, label: group_user.user_label}}
                   loadOptions={this.getUsers}
                   onChange={this.onChangeUser(index)}
+                  isClearable={group_user.user_id}
                 />
               </Grid>
             );

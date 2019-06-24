@@ -92,6 +92,7 @@ inputComponent.propTypes = {
 
 function Control(props) {
   const {
+    error,
     children,
     innerProps,
     innerRef,
@@ -101,6 +102,7 @@ function Control(props) {
   return (
     <TextField
       fullWidth
+      style={error ? {borderBottom: 'solid 1px red'} : null}
       InputProps={{
         inputComponent,
         inputProps: {
@@ -243,6 +245,7 @@ export default function ReactSelect(props) {
           classes={classes}
           inputId="react-select-single"
           TextFieldProps={{
+            error: props.error,
             label: props.label,
             InputLabelProps: {
               htmlFor: 'react-select-single',
@@ -271,6 +274,7 @@ export function AsyncSelect(props) {
           classes={classes}
           inputId="react-select-single"
           TextFieldProps={{
+            error: props.error,
             label: props.label,
             InputLabelProps: {
               htmlFor: 'react-select-single',

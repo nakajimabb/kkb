@@ -8,7 +8,7 @@ class GroupEdit extends Component {
   }
   render() {
     return (
-      <GroupForm history={this.props.history} onClose={this.props.onClose} />
+      <GroupForm {...this.props} />
     );
   }
 }

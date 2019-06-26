@@ -10,7 +10,7 @@ class GroupEdit extends Component {
     const group_id = this.props.group_id || this.props.match.params.id;
 
     return (
-      <GroupForm group_id={group_id} history={this.props.history} onClose={this.props.onClose} />
+      <GroupForm group_id={group_id} {...this.props} />
     );
   }
 }

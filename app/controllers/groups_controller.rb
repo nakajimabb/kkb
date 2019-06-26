@@ -26,13 +26,19 @@ class GroupsController < ApplicationController
   def create
     @group = Group.new(group_params)
     @group.created_by_id = current_user.id
-    @group.save!
-    render json: @group
+    if @group.save
+      render json: @group, status: :created
+    else
+      render json: @group.errors, status: :unprocessable_entity
+    end
   end
 
   def update
-    @group.update_attributes(group_params)
-    render json: @group.to_json
+    if @group.update(group_params)
+      render json: @group.to_json
+    else
+      render json: @group.errors, status: :unprocessable_entity
+    end
   end
 
   private

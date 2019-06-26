@@ -12,13 +12,13 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { withStyles } from "@material-ui/core/styles";
 import { csrfToken } from '@rails/ujs';
 import { str } from "../tools";
 import axios from "../axios";
 import env from "../environment";
+import CustomizedSnackbar from "../snackbars/CustomizedSnackbar";
 import { AsyncSelect } from "../react-select/ReactSelect";
 
 
@@ -54,10 +54,33 @@ const styles = theme => ({
   },
 });
 
+const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1)
+};
+
+const collectErrors = (response) => {
+  let errors = [];
+
+  if (response.status === 404) {
+    errors.push(response.error);
+    return errors
+  }
+
+  const fields = Object.keys(response.data);
+  fields.forEach(field => {
+    const prefix = capitalizeFirstLetter(field);
+    response.data[field].forEach(message => {
+      errors.push(`${prefix} ${message}`)
+    })
+  });
+  return errors
+};
+
 class GroupForm extends Component {
   state = {
     group: {group_users_attributes: []},
     group_users: [],
+    errors: [],
   };
 
   constructor(props) {
@@ -157,11 +180,11 @@ class GroupForm extends Component {
 
   saveGroup() {
     this.axiosProc(this.props.group_id ? 'update' : 'create')
-      .then((results) => {
+      .then((response) => {
         this.onClose();
       })
       .catch(err => {
-        alert(err);
+        this.setState({errors: collectErrors(err.response)});
       })
   }
 
@@ -192,6 +215,18 @@ class GroupForm extends Component {
           { this.state.group.name }
         </DialogTitle>
         <DialogContent>
+          { (this.state.errors.length > 0) ?
+            (<CustomizedSnackbar
+              variant="error"
+              message={
+                this.state.errors.map(error => {
+                  return (
+                    <div>{error}</div>
+                  );
+                })
+              }
+            />) : null
+          }
           <Grid container>
             <TextField
               id="group_code"

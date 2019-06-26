@@ -54,10 +54,6 @@ const styles = theme => ({
   },
 });
 
-const capitalizeFirstLetter = (string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1)
-};
-
 const collectErrors = (response) => {
   let errors = [];
 
@@ -68,9 +64,8 @@ const collectErrors = (response) => {
 
   const fields = Object.keys(response.data);
   fields.forEach(field => {
-    const prefix = capitalizeFirstLetter(field);
     response.data[field].forEach(message => {
-      errors.push(`${prefix} ${message}`)
+      errors.push(`${field} ${message}`)
     })
   });
   return errors

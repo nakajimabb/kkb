@@ -6,6 +6,6 @@ class GroupUser < ApplicationRecord
 
   enum member_type: {normal: 1, hidden: 2}
 
-  validates :group_id, presence: true
-  validates :user_id, presence: true
+  validates :group, presence: true
+  validates :user, presence: true
 end

@@ -20,6 +20,7 @@ import axios from "../axios";
 import env from "../environment";
 import CustomizedSnackbar from "../snackbars/CustomizedSnackbar";
 import { AsyncSelect } from "../react-select/ReactSelect";
+import I18n from "../translations";
 
 
 const styles = theme => ({
@@ -55,7 +56,7 @@ const styles = theme => ({
 });
 
 const collectErrors = (response) => {
-  let errors = [];
+  let errors = {};
 
   if (response.status === 404) {
     errors.push(response.error);
@@ -64,8 +65,10 @@ const collectErrors = (response) => {
 
   const fields = Object.keys(response.data);
   fields.forEach(field => {
+    console.log(field);
     response.data[field].forEach(message => {
-      errors.push(`${field} ${message}`)
+      let field_i18n = I18n.t('activerecord.attributes.group.' + field);
+      errors[field] = field_i18n + message
     })
   });
   return errors
@@ -75,7 +78,7 @@ class GroupForm extends Component {
   state = {
     group: {group_users_attributes: []},
     group_users: [],
-    errors: [],
+    errors: {},
   };
 
   constructor(props) {
@@ -210,13 +213,14 @@ class GroupForm extends Component {
           { this.state.group.name }
         </DialogTitle>
         <DialogContent>
-          { (this.state.errors.length > 0) ?
+          {console.log(this.state.errors)}
+          { (Object.keys(this.state.errors).length > 0) ?
             (<CustomizedSnackbar
               variant="error"
               message={
-                this.state.errors.map(error => {
+                Object.keys(this.state.errors).map(key => {
                   return (
-                    <div>{error}</div>
+                    <div>{this.state.errors[key]}</div>
                   );
                 })
               }
@@ -226,6 +230,7 @@ class GroupForm extends Component {
             <TextField
               id="group_code"
               label="code"
+              error={this.state.errors.code}
               value={str(this.state.group.code)}
               className={classes.textField}
               onChange={this.handleChange('code')}
@@ -235,6 +240,7 @@ class GroupForm extends Component {
             <TextField
               id="group_name"
               label="name"
+              error={this.state.errors.name}
               value={str(this.state.group.name)}
               className={classes.textField}
               onChange={this.handleChange('name')}

@@ -1,0 +1,15 @@
+ja:
+  activerecord:
+    attributes:
+      group:
+        code: "コード"
+        name: "名称"
+        group_type: "種別"
+        group_users:
+          user: "[メンバー] ユーザー"
+          group: "[メンバー] グループ"
+          member_type: "[メンバー] 種別"
+  enum:
+    group:
+      group_type:
+        common: '通常'

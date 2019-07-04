@@ -65,7 +65,6 @@ const collectErrors = (response) => {
 
   const fields = Object.keys(response.data);
   fields.forEach(field => {
-    console.log(field);
     response.data[field].forEach(message => {
       let field_i18n = I18n.t('activerecord.attributes.group.' + field);
       errors[field] = field_i18n + message
@@ -213,7 +212,6 @@ class GroupForm extends Component {
           { this.state.group.name }
         </DialogTitle>
         <DialogContent>
-          {console.log(this.state.errors)}
           { (Object.keys(this.state.errors).length > 0) ?
             (<CustomizedSnackbar
               variant="error"

@@ -7,7 +7,9 @@ ja:
         group_type: "種別"
         group_users:
           user: "[メンバー] ユーザー"
+          user_id: "[メンバー] ユーザー"
           group: "[メンバー] グループ"
+          group_id: "[メンバー] グループ"
           member_type: "[メンバー] 種別"
   enum:
     group:

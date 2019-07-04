@@ -8,4 +8,5 @@ class GroupUser < ApplicationRecord
 
   validates :group, presence: true
   validates :user, presence: true
+  validates :user_id, :uniqueness => {scope: :group_id}
 end

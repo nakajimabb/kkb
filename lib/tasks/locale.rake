@@ -5,7 +5,7 @@ namespace :locale do
 
     translations = {}
     Dir.glob("config/locales/*.yml").each do |f|
-      translations.merge!(YAML.load_file(File.absolute_path(f)))
+      translations.deep_merge!(YAML.load_file(File.absolute_path(f)))
     end
 
     file = File.open("app/javascript/packs/locale.js", "w")

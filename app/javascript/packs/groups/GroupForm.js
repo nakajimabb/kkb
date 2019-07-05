@@ -13,13 +13,19 @@ import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Table from '@material-ui/core/Table';
+import TableHead from '@material-ui/core/TableHead';
+import TableBody from '@material-ui/core/TableBody';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
+import Paper from '@material-ui/core/Paper';
 import { withStyles } from "@material-ui/core/styles";
 import { csrfToken } from '@rails/ujs';
-import { str } from "../tools";
 import axios from "../axios";
 import env from "../environment";
 import CustomizedSnackbar from "../snackbars/CustomizedSnackbar";
 import { AsyncSelect } from "../react-select/ReactSelect";
+import { str } from "../tools";
 import I18n from "../translations";
 
 
@@ -52,6 +58,18 @@ const styles = theme => ({
   icon: {
     margin: theme.spacing(1),
     padding: 1,
+  },
+  paper: {
+    width: 470,
+  },
+  table_body: {
+    padding: 10,
+    margin: 10,
+    width: 450,
+  },
+  table_cell: {
+    border: 'none',
+    padding: 0,
   },
 });
 
@@ -227,7 +245,7 @@ class GroupForm extends Component {
           <Grid container>
             <TextField
               id="group_code"
-              label="code"
+              label={ I18n.t('activerecord.attributes.group.code') }
               error={this.state.errors.code}
               value={str(this.state.group.code)}
               className={classes.textField}
@@ -237,7 +255,7 @@ class GroupForm extends Component {
             />
             <TextField
               id="group_name"
-              label="name"
+              label={ I18n.t('activerecord.attributes.group.name') }
               error={this.state.errors.name}
               value={str(this.state.group.name)}
               className={classes.textField}
@@ -246,42 +264,64 @@ class GroupForm extends Component {
               required
             />
           </Grid>
-          <Typography variant="h6" style={{margin: 10}}>
-            member list
-          </Typography>
-          {this.state.group.group_users_attributes.map((group_user, index) => {
-            return group_user._destroy ? null :
-            (
-              <Grid container>
-                <AsyncSelect
-                  className={classes.select}
-                  style={{marginTop: 0, marginBottom: 0}}
-                  value={group_user.user_id ? {value: group_user.user_id, label: group_user.user_label} : null}
-                  loadOptions={this.getUsers}
-                  onChange={this.onSelectGroupUser(index)}
-                  isClearable={group_user.user_id}
-                  // label="member's name"
-                  placeholder="code or name"
-                />
-                <Select
-                  value={group_user.member_type}
-                  onChange={this.onChangeGroupUser(index)}
-                >
-                  <MenuItem value={'normal'}>normal</MenuItem>
-                  <MenuItem value={'hidden'}>hidden</MenuItem>
-                </Select>
-                <IconButton
-                  aria-label="Delete"
-                  size="small"
-                  className={classes.icon}
-                  onClick={this.onDeleteGroupUser(index)}
-                >
-                  <DeleteIcon fontSize="inherit" />
-                </IconButton>
-              </Grid>
-            );
-          })
-          }
+          <Paper className={classes.paper}>
+          <Table size="small">
+            <colgroup>
+              <col style={{width:'50%'}}/>
+              <col style={{width:'30%'}}/>
+              <col style={{width:'20%'}}/>
+            </colgroup>
+            <TableHead>
+              <TableRow>
+                <TableCell>{ I18n.t('activerecord.attributes.group_user.user_id') }</TableCell>
+                <TableCell>{ I18n.t('activerecord.attributes.group_user.member_type') }</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody className={classes.table_body}>
+              {this.state.group.group_users_attributes.map((group_user, index) => {
+                return group_user._destroy ? null :
+                (
+                  <TableRow className={classes.cell_user}>
+                    <TableCell className={classes.table_cell}>
+                      <AsyncSelect
+                        className={classes.select}
+                        style={{marginTop: 0, marginBottom: 4}}
+                        value={group_user.user_id ? {value: group_user.user_id, label: group_user.user_label} : null}
+                        loadOptions={this.getUsers}
+                        onChange={this.onSelectGroupUser(index)}
+                        isClearable={group_user.user_id}
+                        // label="member's name"
+                        placeholder="code or name"
+                      />
+                    </TableCell>
+                    <TableCell className={classes.table_cell}>
+                      <Select
+                        value={group_user.member_type}
+                        onChange={this.onChangeGroupUser(index)}
+                      >
+                        <MenuItem value={'normal'}>{ I18n.t('enum.group_user.member_type.normal') }</MenuItem>
+                        <MenuItem value={'hidden'}>{ I18n.t('enum.group_user.member_type.hidden') }</MenuItem>
+                      </Select>
+                    </TableCell>
+                    <TableCell className={classes.table_cell}>
+                      <IconButton
+                        aria-label="Delete"
+                        size="small"
+                        className={classes.icon}
+                        onClick={this.onDeleteGroupUser(index)}
+                      >
+                        <DeleteIcon fontSize="inherit" />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                  );
+                })
+              }
+            </TableBody>
+          </Table>
+          </Paper>
+
           <Grid container style={{margin: 10}}>
             <Button variant="outlined" color="primary" size="small" onClick={this.onAddGroupUser} >
               Add Member

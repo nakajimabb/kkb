@@ -2,9 +2,9 @@ ja:
   activerecord:
     attributes:
       group_user:
-        user_id: "ユーザ"
+        user_id: "メンバ"
         group_id: "グループ"
-        member_type: "メンバ種別"
+        member_type: "種別"
   enum:
     group_user:
       member_type:
